@@ -38,6 +38,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   dart_jsonwebtoken: ^2.7.1
   msix: ^3.8.0
+  path_provider: ^2.1.1
 
 dev_dependencies:
   flutter_test:

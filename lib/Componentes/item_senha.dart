@@ -29,7 +29,7 @@ class ItemSenha extends StatelessWidget {
         ),
       ),
       trailing: SizedBox(
-        width: 150,
+        width: 175,
         child: Row(
           children: [
             const Text("Senha: ***"),

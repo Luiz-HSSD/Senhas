@@ -13,10 +13,10 @@ class Pass {
     required this.senha,
   });
 
-  static List<Pass> listarPass() {
+  static Future<List<Pass>> listarPass() async {
     List<Pass> lista = [];
     var tk = Token();
-    lista = tk.readToken();
+    lista = await tk.readToken();
     return lista;
   }
 
