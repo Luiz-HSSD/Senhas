@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:senhas/Componentes/checkbox_form_field.dart';
+import 'package:senhas/Modelo/gerar_senha.dart';
 
 class FormularioGerarSenha extends StatefulWidget {
   final TextEditingController senha;
@@ -11,8 +12,17 @@ class FormularioGerarSenha extends StatefulWidget {
 
 class _FormularioGerarSenhaState extends State<FormularioGerarSenha> {
   Map<String, Object> camposFormularioGerarsenha = {};
+  GlobalKey<FormState> chaveFormularioGerarsenha = GlobalKey<FormState>();
   void _gerarSenha(BuildContext context) {
-    widget.senha.text = "TextEditingController";
+    chaveFormularioGerarsenha.currentState!.save();
+    var senhagerada = gerarSenha.gerarsenha(
+      camposFormularioGerarsenha["caracteres"] as int,
+      camposFormularioGerarsenha["maiusculo"] as bool,
+      camposFormularioGerarsenha["minusculo"] as bool,
+      camposFormularioGerarsenha["numero"] as bool,
+      camposFormularioGerarsenha["caracteresEspecias"] as bool,
+    );
+    widget.senha.text = senhagerada;
     Navigator.of(context).pop();
   }
 
@@ -23,6 +33,7 @@ class _FormularioGerarSenhaState extends State<FormularioGerarSenha> {
         height: 450,
         padding: const EdgeInsets.all(25.0),
         child: Form(
+          key: chaveFormularioGerarsenha,
           child: Column(
             children: [
               TextFormField(
@@ -31,7 +42,7 @@ class _FormularioGerarSenhaState extends State<FormularioGerarSenha> {
                 ),
                 onSaved: (newValue) =>
                     camposFormularioGerarsenha["caracteres"] =
-                        double.parse(newValue!),
+                        int.parse(newValue!),
                 keyboardType: const TextInputType.numberWithOptions(
                   decimal: false,
                   signed: false,
@@ -55,7 +66,7 @@ class _FormularioGerarSenhaState extends State<FormularioGerarSenha> {
               CheckboxFormField(
                 title: const Text("Caracteres Especias"),
                 onSaved: (newValue) =>
-                    camposFormularioGerarsenha["[aracteresEspecias"] =
+                    camposFormularioGerarsenha["caracteresEspecias"] =
                         newValue!,
               ),
               Row(
