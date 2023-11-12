@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:senhas/Componentes/formulario_gerar_senha.dart';
 import 'package:senhas/Modelo/Pass.dart';
+import 'package:senhas/Modelo/lista_senhas.dart';
 
 class PaginaCrudSenhas extends StatefulWidget {
   const PaginaCrudSenhas({super.key});
@@ -14,6 +16,19 @@ class _PaginaCrudSenhasState extends State<PaginaCrudSenhas> {
   Map<String, String> camposFormulario = {};
   bool _isObscure = true;
   GlobalKey<FormState> chaveFormulario = GlobalKey<FormState>();
+  Pass? senhaAtual = null;
+
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    var arg = ModalRoute.of(context)?.settings.arguments as Pass?;
+    if (arg != null) {
+      senhaAtual = arg;
+      if (senhaAtual != null) {
+        senha.text = senhaAtual != null ? senhaAtual!.senha : "";
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,6 +42,7 @@ class _PaginaCrudSenhasState extends State<PaginaCrudSenhas> {
           child: Column(
             children: [
               TextFormField(
+                initialValue: senhaAtual?.nome,
                 decoration: const InputDecoration(
                   labelText: "Nome",
                 ),
@@ -41,6 +57,7 @@ class _PaginaCrudSenhasState extends State<PaginaCrudSenhas> {
                     camposFormulario["nome"] = novoValor ?? "",
               ),
               TextFormField(
+                initialValue: senhaAtual?.login,
                 decoration: const InputDecoration(
                   labelText: "Login",
                 ),
@@ -121,17 +138,27 @@ class _PaginaCrudSenhasState extends State<PaginaCrudSenhas> {
                           login: camposFormulario["login"]!,
                           senha: camposFormulario["senha"]!,
                         );
-                        List<Pass> lista = await Pass.listarPass();
-                        lista.add(senhaGravar);
-                        Pass.gravaPass(lista
-                            .map(
-                              (e) => {
-                                "nome": e.nome,
-                                "login": e.login,
-                                "senha": e.senha,
-                              },
-                            )
-                            .toList());
+                        List<Pass> lista = await (Provider.of<ListaSenhas>(
+                                context,
+                                listen: false))
+                            .listarPass();
+                        if (senhaAtual == null) {
+                          lista.add(senhaGravar);
+                        } else {
+                          var indiceSenha = lista.indexWhere(
+                              (element) => element.nome == senhaAtual!.nome);
+                          lista[indiceSenha] = senhaGravar;
+                        }
+                        (Provider.of<ListaSenhas>(context, listen: false))
+                            .gravaPass(lista
+                                .map(
+                                  (e) => {
+                                    "nome": e.nome,
+                                    "login": e.login,
+                                    "senha": e.senha,
+                                  },
+                                )
+                                .toList());
                         Navigator.of(context).pop();
                       },
                     ),

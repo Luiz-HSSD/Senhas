@@ -1,7 +1,3 @@
-import 'dart:convert';
-
-import 'token.dart';
-
 class Pass {
   final String nome;
   final String login;
@@ -12,17 +8,4 @@ class Pass {
     required this.login,
     required this.senha,
   });
-
-  static Future<List<Pass>> listarPass() async {
-    List<Pass> lista = [];
-    var tk = Token();
-    lista = await tk.readToken();
-    return lista;
-  }
-
-  static void gravaPass(List<Map<String, String>> lista) {
-    String listaString = jsonEncode(lista);
-    var tk = Token();
-    tk.writeToken(listaString);
-  }
 }

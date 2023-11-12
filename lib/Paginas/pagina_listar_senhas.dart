@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:senhas/Componentes/item_senha.dart';
 import 'package:senhas/Modelo/Pass.dart';
+import 'package:senhas/Modelo/lista_senhas.dart';
 import 'package:senhas/utils/app_routes.dart';
 
 class PaginaListarSenhas extends StatelessWidget {
   const PaginaListarSenhas({super.key});
 
-  Future<List<Pass>> listarSenha() async {
-    return await Pass.listarPass();
+  Future<List<Pass>> listarSenha(BuildContext context) async {
+    return await (Provider.of<ListaSenhas>(context)).listarPass();
   }
 
   @override
@@ -26,7 +28,7 @@ class PaginaListarSenhas extends StatelessWidget {
                 ],
         );
       },
-      future: listarSenha(),
+      future: listarSenha(context),
     );
     return Scaffold(
       appBar: AppBar(
