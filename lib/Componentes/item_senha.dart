@@ -6,7 +6,8 @@ import 'package:senhas/utils/app_routes.dart';
 class ItemSenha extends StatelessWidget {
   final Pass senha;
   const ItemSenha(this.senha, {super.key});
-
+  final double tamanhoIcone = 24;
+  final EdgeInsets paddingIcone = const EdgeInsets.all(5.0);
   @override
   Widget build(BuildContext context) {
     return ListTile(
@@ -31,41 +32,38 @@ class ItemSenha extends StatelessWidget {
         ),
       ),
       title: Text(senha.nome),
-      subtitle: SizedBox(
-        width: 300,
-        child: Row(
-          children: [
-            Text("Login: ${senha.login}"),
-            IconButton(
-              onPressed: () {},
-              icon: const Icon(Icons.copy),
+      subtitle: Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Text("Login: ${senha.login}"),
+          IconButton(
+            onPressed: () async {
+              await Clipboard.setData(ClipboardData(text: senha.login));
+            },
+            icon: Icon(
+              Icons.copy,
+              size: tamanhoIcone,
             ),
-            IconButton(
-              onPressed: () async {
-                await Clipboard.setData(ClipboardData(text: senha.login));
-              },
-              icon: const Icon(Icons.arrow_upward),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
-      trailing: SizedBox(
-        width: 175,
-        child: Row(
-          children: [
-            const Text("Senha: ***"),
-            IconButton(
-              onPressed: () async {
-                await Clipboard.setData(ClipboardData(text: senha.senha));
-              },
-              icon: const Icon(Icons.copy),
-            ),
-            IconButton(
-              onPressed: () {},
-              icon: const Icon(Icons.arrow_upward),
-            ),
-          ],
-        ),
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          const Text("Senha: ***"),
+          IconButton(
+            onPressed: () async {
+              await Clipboard.setData(ClipboardData(text: senha.senha));
+            },
+            icon: Icon(Icons.copy, size: tamanhoIcone),
+          ),
+          IconButton(
+            onPressed: () {},
+            icon: Icon(Icons.arrow_upward, size: tamanhoIcone),
+          ),
+        ],
       ),
     );
   }
